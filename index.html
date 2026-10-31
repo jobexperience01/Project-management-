@@ -36,10 +36,20 @@ svg text{fill:var(--mut);font-size:10px}.seg{display:flex;height:34px;border-rad
 .st{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.st .card{margin:0;border-top:4px solid var(--ac)}
 .ed{display:flex;flex-direction:column;gap:7px}.ed .r{display:flex;gap:6px;align-items:center}.ed .r input,.ed .r textarea{flex:1;min-width:0}.ed .r input.k1{flex:0 0 38%;font-weight:600}.ed .r textarea{min-height:44px;resize:vertical}.ed .h{font-size:13px;font-weight:700;margin-bottom:2px}.ed .add{align-self:flex-start;border-style:dashed;color:var(--ac);padding:5px 12px}
 .def{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}.def .card{margin:0}.def h3{margin:0 0 3px;font-size:14px}.def code{background:var(--bg);padding:2px 7px;border-radius:6px;font-size:12px;display:inline-block;margin-top:6px}.rd{font-size:13px;margin-top:7px;padding:8px 10px;border-radius:8px;background:var(--bg)}
+.ab{margin-top:22px}.ab h3{margin:0 0 8px;font-size:13px;letter-spacing:.8px;text-transform:uppercase;color:var(--ok)}.ab .nm{font-size:18px;font-weight:700}.ab .rl{color:var(--mut);margin-bottom:8px}.chips{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 10px}.chips span{background:var(--bg);border:1px solid var(--bd);border-radius:99px;padding:3px 12px;font-size:12.5px}.ab hr{border:0;border-top:1px solid var(--bd);margin:16px 0}.ab a{color:var(--ac);text-decoration:none}.ab a:hover{text-decoration:underline}.ab .ln2{margin:6px 0}.ab .ft{text-align:center;color:var(--mut);font-size:12px;margin-top:14px}
 #toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#172033;color:#fff;padding:9px 16px;border-radius:99px;opacity:0;transition:.25s;pointer-events:none;font-size:13px;z-index:9;max-width:90vw}
 </style></head><body>
 <div class="hd"><div class="hi"><h1>⚙ Project &amp; Machine Installation Manager</h1><p>Standard workflow · Gantt schedule · monthly achievement · PSI Q&amp;A · feasibility · PDF / Excel</p></div></div>
-<div class="w"><div class="nav" id="chips"></div><div class="nav" id="tabs"></div><div id="main"></div></div><div id="toast"></div>
+<div class="w"><div class="nav" id="chips"></div><div class="nav" id="tabs"></div><div id="main"></div>
+<div class="card ab"><h3>👤 Built by</h3><div class="nm">Md Shahariar Ahmed</div><div class="rl">Developer</div>
+<div class="chips"><span>📜 EIT (APEGS)</span><span>🥋 LSS Green Belt</span><span>🎓 M.Eng Industrial Systems Engineering</span><span>🎓 B.Sc Mechanical Engineering</span></div>
+<div class="s" style="font-size:14px">Designed and built this app to make project and machine installation planning fast, private, and free.</div>
+<hr><h3>✉️ Contact &amp; feedback</h3>
+<div class="ln2">📧 <a href="mailto:jobexperience01@gmail.com">jobexperience01@gmail.com</a></div>
+<div class="ln2">🆔 <a href="https://orcid.org/0009-0003-6480-4817" target="_blank" rel="noopener">ORCID: 0009-0003-6480-4817</a></div>
+<div class="s" style="font-size:14px;margin:8px 0">Found a bug or have a feature request? Reach out any time.</div>
+<div class="row"><button onclick="shareApp()">🔗 <b>Share this app</b></button><a href="mailto:jobexperience01@gmail.com?subject=Project%20%26%20Machine%20Installation%20Manager%20feedback" style="text-decoration:none"><button type="button">📝 <b>Send feedback</b></button></a></div>
+<div class="ft">Project &amp; Machine Installation Manager · v1.0.0</div></div></div><div id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -215,6 +225,7 @@ y=H('Cash flow analysis');d.autoTable({...o,startY:y,head:[['Year','Units','Elig
 const ob=L2(p.obs).filter(x=>x.trim());if(ob.length){y=H('Observations & recommendations');d.autoTable({...o,startY:y,body:ob.map(x=>[A(x)])})}
 y=H('Feasibility data checklist');d.autoTable({...o,startY:y,head:[['Sl','Category','Done','Remarks']],body:CK.map((c,i)=>[i+1,A(c[0]),F.ck[i]?'Yes':'',A(F.rm[i]||'')])})});
 return d.output('blob')}
+async function shareApp(){const u=location.href;try{if(navigator.share){await navigator.share({title:document.title,text:'Project & Machine Installation Manager',url:u});return}}catch(e){if(e&&e.name=='AbortError')return}try{await navigator.clipboard.writeText(u);toast('Link copied')}catch(e){toast('Copy the page address from your browser to share')}}
 async function imp(file){if(!file)return;try{let j;if(/\.json$/i.test(file.name))j=JSON.parse(await file.text());else{if(!window.XLSX)throw Error('Excel library not loaded');const wb=XLSX.read(await file.arrayBuffer()),ws=wb.Sheets['_DATA'];if(!ws)throw Error('no _DATA sheet – use a file exported from this tool');j=JSON.parse(XLSX.utils.sheet_to_json(ws,{header:1}).map(r=>r[0]||'').join(''))}
 if(!Array.isArray(j.projects)||!j.projects.length)throw Error('no items found');j.projects.forEach(p=>{p.id=uid();p.f=Object.assign(feas(),p.f)});
 if($('#mode').value=='rep'){S={projects:j.projects};ci=0}else{ci=S.projects.length;S.projects.push(...j.projects)}
